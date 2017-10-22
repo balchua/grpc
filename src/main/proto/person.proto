@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.bal.app.proto.internal";
+option java_outer_classname = "PersonProto";
+
+package org.bal.app.proto.internal;
+
+message Person {
+    int32 id = 1;
+    string firstName = 2;
+    string lastName = 3;
+}
+
+message PersonById {
+    int32 id = 1;
+}
+
+// The greeting service definition.
+service PersonManagement {
+
+    rpc GetPersonById (PersonById) returns (Person) {
+    }
+}
