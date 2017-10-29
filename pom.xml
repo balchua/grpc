@@ -8,7 +8,7 @@
     <version>1.6</version>
     <properties>
         <springboot-grpc-version>2.0.5</springboot-grpc-version>
-        <grpc.version>1.6.7</grpc.version><!-- CURRENT_GRPC_VERSION -->
+        <grpc.version>1.6.1</grpc.version><!-- CURRENT_GRPC_VERSION -->
         <dockerfile-maven-version>1.3.6</dockerfile-maven-version>
         <ignite.version>2.1.0</ignite.version>
         <slf4j.version>1.7.25</slf4j.version>
@@ -216,7 +216,7 @@
                 <executions>
                     <execution>
                         <id>filter-dockerfile</id>
-                        <phase>generate-resources</phase>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
