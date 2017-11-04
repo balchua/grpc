@@ -18,11 +18,18 @@ spec:
     spec:
       containers:
       - name: grpc
-        image: grpc:1.6
+        image: grpc:1.6.1
         ports:
         - containerPort: 50051
           protocol: TCP
         imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 256M
+            cpu: 1000m
+          requests:
+            memory: 128M
+            cpu: 500m
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
