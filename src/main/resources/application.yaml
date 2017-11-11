@@ -3,15 +3,8 @@ grpc:
 
 logging:
   level:
-    ROOT: INFO
+    ROOT: DEBUG
 
 zipkin:
-  nodePort: 30002
-  external-host: 192.168.99.100
-  #oc config
-  #service-host: zipkin-service.myproject.svc
-  service-host: zipkin.my-project
-
-person-service:
-  external-host: 192.168.99.100
-  external-port: 30001
+  host: ${ZIPKIN_HOST}
+  port: ${ZIPKIN_PORT}

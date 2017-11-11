@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: grpc
-        image: grpc:1.6.1
+        image: grpc:1.6.2
         ports:
         - containerPort: 50051
           protocol: TCP
@@ -30,6 +30,17 @@ spec:
           requests:
             memory: 128M
             cpu: 500m
+        env:
+          - name: ZIPKIN_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: grpc-config
+                key: zipkin-host
+          - name: ZIPKIN_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: grpc-config
+                key: zipkin-port
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
