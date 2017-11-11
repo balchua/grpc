@@ -3,20 +3,16 @@ package org.bal.app.server.config;
 
 import brave.Tracing;
 import brave.grpc.GrpcTracing;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.ServerInterceptor;
-import org.bal.app.proto.internal.PersonManagementGrpc;
-import org.bal.app.proto.internal.PersonManagementGrpc.PersonManagementBlockingStub;
 import org.bal.app.server.service.PersonManagementService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import zipkin.Span;
-import zipkin.reporter.AsyncReporter;
-import zipkin.reporter.Reporter;
-import zipkin.reporter.Sender;
-import zipkin.reporter.okhttp3.OkHttpSender;
+import zipkin2.Span;
+import zipkin2.reporter.AsyncReporter;
+import zipkin2.reporter.Reporter;
+import zipkin2.reporter.Sender;
+import zipkin2.reporter.okhttp3.OkHttpSender;
 
 @org.springframework.context.annotation.Configuration
 @ComponentScan("org.bal.app.server")
@@ -87,8 +83,8 @@ public class Configuration {
     @Bean
     public Tracing tracing() {
         return Tracing.newBuilder()
-                .localServiceName("person-grpc")
-                .reporter(reporter()).build();
+                .localServiceName("person-grpc-service")
+                .spanReporter(reporter()).build();
     }
 
     /**
@@ -96,7 +92,7 @@ public class Configuration {
      */
     @Bean
     public Sender sender() {
-        return OkHttpSender.create("http://" + zipkinHost + ":" + zipkinPort + "/api/v1/spans");
+        return OkHttpSender.create("http://" + zipkinHost + ":" + zipkinPort + "/api/v2/spans");
     }
 
     @Bean
@@ -110,19 +106,19 @@ public class Configuration {
         return grpcTracing().newServerInterceptor();
     }
 
-    @Bean
-    public ManagedChannelBuilder managedChannelBuilder() {
-        return ManagedChannelBuilder.forAddress("localhost", 50051)
-                .usePlaintext(true);
-    }
-
-    @Bean
-    public ManagedChannel managedChannel() {
-        return managedChannelBuilder().build();
-    }
-
-    @Bean("personManagementBlockingStub")
-    public PersonManagementBlockingStub personManagementBlockingStub() {
-        return PersonManagementGrpc.newBlockingStub(managedChannel());
-    }
+//    @Bean
+//    public ManagedChannelBuilder managedChannelBuilder() {
+//        return ManagedChannelBuilder.forAddress("localhost", 50051)
+//                .usePlaintext(true);
+//    }
+//
+//    @Bean
+//    public ManagedChannel managedChannel() {
+//        return managedChannelBuilder().build();
+//    }
+//
+//    @Bean("personManagementBlockingStub")
+//    public PersonManagementBlockingStub personManagementBlockingStub() {
+//        return PersonManagementGrpc.newBlockingStub(managedChannel());
+//    }
 }
