@@ -6,15 +6,22 @@ import org.bal.app.proto.internal.Person;
 import org.bal.app.proto.internal.PersonById;
 import org.bal.app.proto.internal.PersonManagementGrpc;
 import org.bal.app.server.interceptor.ZipkinServerInterceptor;
+import org.bal.app.server.repository.NameGenerator;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
 @GRpcService(interceptors = {ZipkinServerInterceptor.class})
+@Component
 public class PersonManagementService extends PersonManagementGrpc.PersonManagementImplBase {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonManagementService.class);
+
+    @Autowired
+    private NameGenerator nameGenerator;
 
     @Override
     public void getPersonById(PersonById request,
@@ -28,5 +35,16 @@ public class PersonManagementService extends PersonManagementGrpc.PersonManageme
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
     }
+
+    public void randomNames(com.google.protobuf.Empty request,
+                            io.grpc.stub.StreamObserver<org.bal.app.proto.internal.Person> responseObserver) {
+
+        Person person = nameGenerator.generatePerson();
+
+        LOG.info("Hi {} {}", person.getDescription(), person.getFirstName());
+        responseObserver.onNext(person);
+        responseObserver.onCompleted();
+    }
+
 
 }

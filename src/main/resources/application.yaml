@@ -6,5 +6,5 @@ logging:
     ROOT: DEBUG
 
 zipkin:
-  host: ${ZIPKIN_HOST}
-  port: ${ZIPKIN_PORT}
+  host: ${ZIPKIN_HOST:localhost}
+  port: ${ZIPKIN_PORT:9411}

@@ -17,6 +17,7 @@
 package org.bal.app.server;
 
 
+import com.google.protobuf.Empty;
 import io.grpc.testing.GrpcServerRule;
 import org.bal.app.proto.internal.Person;
 import org.bal.app.proto.internal.PersonById;
@@ -25,12 +26,15 @@ import org.bal.app.server.service.PersonManagementService;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@RunWith(JUnit4.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = org.bal.app.server.config.Configuration.class)
 public class PersonServerTest {
     /**
      * This creates and starts an in-process server, and creates a starters with an in-process channel.
@@ -39,6 +43,9 @@ public class PersonServerTest {
     @Rule
     public final GrpcServerRule grpcServerRule = new GrpcServerRule().directExecutor();
 
+    @Autowired
+    private PersonManagementService service;
+
     /**
      * To app the server, make calls with a real stub using the in-process channel, and verify
      * behaviors or state changes from the starters side.
@@ -46,7 +53,7 @@ public class PersonServerTest {
     @Test
     public void should_find_the_person_by_id() throws Exception {
         // Add the service to the in-process server.
-        grpcServerRule.getServiceRegistry().addService(new PersonManagementService());
+        grpcServerRule.getServiceRegistry().addService(service);
 
         PersonManagementGrpc.PersonManagementBlockingStub blockingStub =
                 PersonManagementGrpc.newBlockingStub(grpcServerRule.getChannel());
@@ -55,5 +62,20 @@ public class PersonServerTest {
         Person person = blockingStub.getPersonById(PersonById.newBuilder().setId(2).build());
 
         assertThat(person.getFirstName()).isEqualTo("Balchu");
+    }
+
+    @Test
+    public void should_find_random_names() throws Exception {
+        // Add the service to the in-process server.
+        grpcServerRule.getServiceRegistry().addService(service);
+
+        PersonManagementGrpc.PersonManagementBlockingStub blockingStub =
+                PersonManagementGrpc.newBlockingStub(grpcServerRule.getChannel());
+
+
+        Person person = blockingStub.randomNames(Empty.newBuilder().build());
+
+        assertThat(person.getFirstName()).isNotEmpty();
+        assertThat(person.getDescription()).isNotEmpty();
     }
 }

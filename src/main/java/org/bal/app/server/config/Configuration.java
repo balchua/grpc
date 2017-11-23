@@ -4,8 +4,11 @@ package org.bal.app.server.config;
 import brave.Tracing;
 import brave.grpc.GrpcTracing;
 import io.grpc.ServerInterceptor;
+import org.bal.app.server.repository.NameGenerator;
+import org.bal.app.server.repository.NameGeneratorImpl;
 import org.bal.app.server.service.PersonManagementService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import zipkin2.Span;
@@ -14,8 +17,8 @@ import zipkin2.reporter.Reporter;
 import zipkin2.reporter.Sender;
 import zipkin2.reporter.okhttp3.OkHttpSender;
 
-@org.springframework.context.annotation.Configuration
 @ComponentScan("org.bal.app.server")
+@SpringBootConfiguration
 public class Configuration {
 
     @Value("${zipkin.host}")
@@ -27,6 +30,11 @@ public class Configuration {
     @Bean
     public PersonManagementService personManagementService() {
         return new PersonManagementService();
+    }
+
+    @Bean
+    public NameGenerator nameGenerator() {
+        return new NameGeneratorImpl();
     }
 
 //    @Bean
@@ -106,19 +114,4 @@ public class Configuration {
         return grpcTracing().newServerInterceptor();
     }
 
-//    @Bean
-//    public ManagedChannelBuilder managedChannelBuilder() {
-//        return ManagedChannelBuilder.forAddress("localhost", 50051)
-//                .usePlaintext(true);
-//    }
-//
-//    @Bean
-//    public ManagedChannel managedChannel() {
-//        return managedChannelBuilder().build();
-//    }
-//
-//    @Bean("personManagementBlockingStub")
-//    public PersonManagementBlockingStub personManagementBlockingStub() {
-//        return PersonManagementGrpc.newBlockingStub(managedChannel());
-//    }
 }
