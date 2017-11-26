@@ -1,6 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  namespace: {{ .Values.namespace }}
   name: {{ template "grpc.fullname" . }}
   labels:
     app: {{ template "grpc.name" . }}
@@ -9,6 +10,7 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 2
   template:
     metadata:
       labels:
@@ -21,17 +23,24 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.service.internalPort }}
-          readinessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.service.internalPort }}
+              protocol: "TCP"
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+          env:
+            - name: ZIPKIN_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "grpc.fullname" . }}
+                  key: zipkin-host
+            - name: ZIPKIN_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "grpc.fullname" . }}
+                  key: zipkin-port
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
+      restartPolicy: {{ .Values.image.restartPolicy }}
+      terminationGracePeriodSeconds: {{ .Values.image.terminationGracePeriodSeconds }}
+      dnsPolicy: {{ .Values.image.dnsPolicy }}
     {{- end }}
