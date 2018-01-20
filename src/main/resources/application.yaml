@@ -1,5 +1,6 @@
 grpc:
     port : 50051
+    file : /data/test.txt
 
 logging:
   level:

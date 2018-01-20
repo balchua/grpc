@@ -19,6 +19,7 @@ package org.bal.app.server;
 
 import com.google.protobuf.Empty;
 import io.grpc.testing.GrpcServerRule;
+import org.bal.app.proto.internal.FileContent;
 import org.bal.app.proto.internal.Person;
 import org.bal.app.proto.internal.PersonById;
 import org.bal.app.proto.internal.PersonManagementGrpc;
@@ -77,5 +78,20 @@ public class PersonServerTest {
 
         assertThat(person.getFirstName()).isNotEmpty();
         assertThat(person.getDescription()).isNotEmpty();
+    }
+
+    @Test
+    public void should_get_file_content() throws Exception {
+        // Add the service to the in-process server.
+        grpcServerRule.getServiceRegistry().addService(service);
+
+        PersonManagementGrpc.PersonManagementBlockingStub blockingStub =
+                PersonManagementGrpc.newBlockingStub(grpcServerRule.getChannel());
+
+
+        FileContent fileContent = blockingStub.whatsTheNameInTheFile(Empty.newBuilder().build());
+
+        assertThat(fileContent.getContent()).isEmpty();
+
     }
 }
