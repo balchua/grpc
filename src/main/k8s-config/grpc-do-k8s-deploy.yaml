@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: grpc
-        image: balchu/grpc:1.6.2
+        image: balchu/grpc:1.7.0
         ports:
         - containerPort: 50051
           protocol: TCP
@@ -32,6 +32,8 @@ spec:
             memory: 128M
             cpu: 500m
         env:
+          - name: TZ
+            value: Asia/Singapore
           - name: ZIPKIN_HOST
             valueFrom:
               configMapKeyRef:
