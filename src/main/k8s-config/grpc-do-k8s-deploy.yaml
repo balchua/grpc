@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: grpc
-        image: balchu/grpc:1.7.0
+        image: balchu/grpc:1.7.1
         ports:
         - containerPort: 50051
           protocol: TCP

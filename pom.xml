@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>grpc</artifactId>
     <groupId>org.bal.app</groupId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
     <properties>
         <springboot-grpc-version>2.0.5</springboot-grpc-version>
         <grpc.version>1.6.1</grpc.version><!-- CURRENT_GRPC_VERSION -->
