@@ -91,7 +91,7 @@ public class Configuration {
     @Bean
     public Tracing tracing() {
         return Tracing.newBuilder()
-                .localServiceName("person-grpc-service")
+                .localServiceName("grpc-backend-service")
                 .spanReporter(reporter()).build();
     }
 
