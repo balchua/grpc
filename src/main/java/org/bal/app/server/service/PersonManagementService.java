@@ -65,7 +65,7 @@ public class PersonManagementService extends PersonManagementGrpc.PersonManageme
         LOG.info("File is : {}", Paths.get(fileName));
 
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-            stream.forEach(s -> lines.append(s));
+            stream.forEach(s -> lines.append(s).append(System.lineSeparator()));
 
         } catch (IOException e) {
             LOG.error("Unable to find the file.", e);

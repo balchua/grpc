@@ -7,19 +7,21 @@ metadata:
   labels:
     run: grpc
 spec:
-  replicas: 1
+  replicas: 4
   revisionHistoryLimit: 2
   selector:
     matchLabels:
       run: grpc
   template:
     metadata:
+      annotations:
+        kubernetes.io/change-cause: "grpc version 1.7.2"
       labels:
         run: grpc
     spec:
       containers:
       - name: grpc
-        image: balchu/grpc:1.7.1
+        image: balchu/grpc:1.7.2
         ports:
         - containerPort: 50051
           protocol: TCP
