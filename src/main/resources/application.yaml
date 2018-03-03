@@ -9,3 +9,4 @@ logging:
 zipkin:
   host: ${ZIPKIN_HOST:localhost}
   port: ${ZIPKIN_PORT:9411}
+
