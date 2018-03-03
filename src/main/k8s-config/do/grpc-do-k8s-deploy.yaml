@@ -28,10 +28,10 @@ spec:
         imagePullPolicy: Always
         resources:
           limits:
-            memory: 256M
+            memory: 512M
             cpu: 1000m
           requests:
-            memory: 128M
+            memory: 512M
             cpu: 500m
         env:
           - name: TZ
