@@ -5,19 +5,19 @@ metadata:
   name: grpc
   namespace: do-myproject
   labels:
-    run: grpc
+    app: grpc
 spec:
   replicas: 4
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      run: grpc
+      app: grpc
   template:
     metadata:
       annotations:
         kubernetes.io/change-cause: "grpc version 1.7.2"
       labels:
-        run: grpc
+        app: grpc
     spec:
       containers:
       - name: grpc
@@ -51,8 +51,10 @@ spec:
             name: datadir
       volumes:
         - name: datadir
-          persistentVolumeClaim:
-            claimName: sample-pv-claim
+          emptyDir: {}
+
+#          persistentVolumeClaim:
+#            claimName: sample-pv-claim
 
       restartPolicy: Always
       terminationGracePeriodSeconds: 30

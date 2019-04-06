@@ -5,12 +5,13 @@ metadata:
   name: grpc-service
   namespace: do-myproject
   labels:
-    run: grpc
+    app: grpc
 spec:
   ports:
   -  protocol: TCP
      port: 9999
      targetPort: 50051
+     name: grpc
   selector:
-    run: grpc
+    app: grpc
 
